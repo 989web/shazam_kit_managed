@@ -1,7 +1,7 @@
-import 'package:flutter_shazam_kit/models/detecting_state.dart';
-import 'package:flutter_shazam_kit/models/diagnostics.dart';
-import 'package:flutter_shazam_kit/models/error.dart';
-import 'package:flutter_shazam_kit/models/result.dart';
+import 'package:shazam_kit_managed/models/detecting_state.dart';
+import 'package:shazam_kit_managed/models/diagnostics.dart';
+import 'package:shazam_kit_managed/models/error.dart';
+import 'package:shazam_kit_managed/models/result.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
 import 'flutter_shazam_kit_method_channel.dart';

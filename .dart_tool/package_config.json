@@ -164,7 +164,7 @@
       "languageVersion": "3.5"
     },
     {
-      "name": "flutter_shazam_kit",
+      "name": "shazam_kit_managed",
       "rootUri": "../",
       "packageUri": "lib/",
       "languageVersion": "2.17"

@@ -1,16 +1,17 @@
-name: flutter_shazam_kit
+name: shazam_kit_managed
 description: >-
-  Fork corretto (989 Records) di flutter_shazam_kit: usa SHManagedSession
-  su iOS 17+ e, come ripiego sotto iOS 17, converte esplicitamente il
-  buffer del microfono nel formato richiesto da SHSession prima di
-  passarlo a matchStreamingBuffer. Interfaccia Dart invariata rispetto
-  all'originale (ssttonn/flutter_shazam_kit 1.0.2), con un callback
-  diagnostics aggiuntivo opzionale.
+  Copia corretta di flutter_shazam_kit (fork non ufficiale, 989 Records)
+  che usa SHManagedSession su iOS 17 e superiori e, sul ripiego per le
+  versioni precedenti, converte esplicitamente il formato audio prima di
+  passarlo a ShazamKit invece di inoltrare il formato nativo del
+  microfono. Interfaccia Dart invariata rispetto all'originale
+  (ssttonn/flutter_shazam_kit 1.0.2).
 version: 1.0.3
-homepage: https://github.com/989web/flutter_shazam_kit_989
+homepage: https://github.com/989web/shazam_kit_managed
+repository: https://github.com/989web/shazam_kit_managed
 
 environment:
-  sdk: ">=2.17.6 <3.0.0"
+  sdk: ">=2.17.6 <4.0.0"
   flutter: ">=2.5.0"
 
 dependencies:

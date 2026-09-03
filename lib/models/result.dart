@@ -1,4 +1,4 @@
-import 'package:flutter_shazam_kit/models/media_item.dart';
+import 'package:shazam_kit_managed/models/media_item.dart';
 
 abstract class MatchResult {}
 
