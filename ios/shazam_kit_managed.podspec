@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'shazam_kit_managed'
-  s.version          = '1.0.4'
+  s.version          = '1.0.5'
   s.summary          = 'Fork corretto di flutter_shazam_kit: SHManagedSession su iOS 17+, conversione di formato esplicita nel ripiego.'
   s.description      = <<-DESC
 Copia corretta di flutter_shazam_kit (fork non ufficiale, 989 Records) che usa SHManagedSession su iOS 17 e superiori e, sul ripiego per le versioni precedenti, converte esplicitamente il formato audio prima di passarlo a ShazamKit.

@@ -5,7 +5,7 @@
   "packages": [
     {
       "name": "shazam_kit_managed",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "dependencies": [
         "flutter",
         "plugin_platform_interface"

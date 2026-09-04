@@ -1,3 +1,18 @@
+## 1.0.5 (989 Records fork)
+
+* Fix: "com.apple.ShazamKit error 202" a intermittenza su alcuni cicli.
+  Causa individuata: `startManagedListening` richiamava
+  `SHManagedSession.prepare()` a OGNI riapertura del ciclo (l'app chiude
+  la sessione Shazam fra un ciclo e l'altro per liberare il microfono
+  alla registrazione dei 15s per i provider), invece di prepararla una
+  sola volta come fa il pattern ufficiale Apple. Ripetere `prepare()` su
+  una sessione appena `cancel()`-ata, mentre il motore audio sottostante
+  puo' non aver ancora finito di smontarsi, e' compatibile con un errore
+  intermittente (compare solo su alcuni cicli, non su tutti — coerente
+  con una corsa, non con un problema di permessi/configurazione, che
+  fallirebbe sempre). Ora `prepare()` viene chiamato una sola volta per
+  istanza di `SHManagedSession`; l'istanza si ricrea solo su `endSession`.
+
 ## 1.0.4 (989 Records fork)
 
 * Fix: `ios/flutter_shazam_kit.podspec` rinominato in

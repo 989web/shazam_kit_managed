@@ -53,6 +53,23 @@ public class SwiftFlutterShazamKitPlugin: NSObject, FlutterPlugin {
         set { managedSessionBox = newValue }
     }
     private var managedSessionTask: Task<Void, Never>?
+    // "Errore 202 a intermittenza" — indagine: l'app chiude la sessione
+    // Shazam a ogni ciclo (cancel(), per liberare il microfono alla
+    // registrazione dei 15s per i provider — "un solo proprietario del
+    // microfono alla volta") e ne riapre una nuova al ciclo successivo.
+    // Prima, startManagedListening richiamava managed.prepare() a OGNI
+    // riapertura: ma il pattern reale di Apple (sample ufficiali, WWDC23)
+    // prepara la sessione UNA volta sola per tutta la vita dell'oggetto e
+    // poi si limita a interrogare result() ripetutamente — mai un secondo
+    // prepare() sulla STESSA istanza. Ripetere prepare() su una sessione
+    // appena cancel()-ata, mentre il motore audio sottostante potrebbe non
+    // aver ancora finito di smontarsi, e' il candidato piu' concreto per
+    // "error 202" intermittente (compare solo su alcuni cicli, mai su
+    // tutti: coerente con una corsa/race, non con un problema di permessi
+    // o di configurazione, che fallirebbe SEMPRE). Fix: prepare() una sola
+    // volta per istanza di SHManagedSession, mai piu' finche' l'istanza
+    // non viene ricreata (endSession).
+    private var managedPreparata = false
 
     private var callbackChannel: FlutterMethodChannel?
 
@@ -86,6 +103,7 @@ public class SwiftFlutterShazamKitPlugin: NSObject, FlutterPlugin {
                 managedSessionTask?.cancel()
                 managedSessionTask = nil
                 managedSession = nil
+                managedPreparata = false
             }
             result(nil)
         default:
@@ -140,8 +158,14 @@ extension SwiftFlutterShazamKitPlugin {
         managedSessionTask = Task { [weak self] in
             guard let self = self else { return }
             // prepare() richiede da sola il permesso microfono e configura
-            // motore audio/sessione — nessuna gestione manuale qui.
-            await managed.prepare()
+            // motore audio/sessione — chiamato UNA sola volta per istanza
+            // (vedi commento esteso su managedPreparata): ripeterlo a ogni
+            // ciclo su una sessione appena cancel()-ata era il candidato
+            // piu' concreto per "error 202" intermittente.
+            if !self.managedPreparata {
+                await managed.prepare()
+                self.managedPreparata = true
+            }
             self.emitDiagnostics(via: "managed_SHManagedSession", sampleRate: nil,
                                   formato: "Gestito automaticamente da SHManagedSession (conversione di formato interna al sistema)")
             // Non si chiude a intervalli fissi: resta in ascolto e segnala
